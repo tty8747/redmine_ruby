@@ -9,6 +9,12 @@
     mode: '0600'
   loop: "{{ av_user }}"
 
+- name: "Clone redmine's repo"
+  git:
+    repo: "https://github.com/redmine/redmine"
+    dest: "{{ path_to_mount_raid }}/{{ item.1.name }}"
+  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
+
 - name: "Install dependencies"
   apt:
     pkg:
