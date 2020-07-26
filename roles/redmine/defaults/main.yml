@@ -4,4 +4,3 @@ path_to_mount_raid: /raid
 av_user:
   - user1
   - user2
-

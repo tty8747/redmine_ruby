@@ -1,6 +1,6 @@
 ---
 
-- hosts: redmine
+- hosts: redmine_host
   remote_user: deploy
   become: "yes"
   become_user: "root"
@@ -10,7 +10,7 @@
   vars:
     servername: "{{ inventory_hostname }}"
 
-# role: zzet.rbenv
+    # role: zzet.rbenv
     rbenv:
       env: system
       version: v1.1.2
@@ -18,11 +18,11 @@
       rubies:
         - version: 2.6.6
     rbenv_clean_up: "false"
-    rbenv_users: 
+    rbenv_users:
       - user1
       - user2
 
-# role: addusers
+    # role: addusers
     path_to_mount_raid: /raid
     group_dict:
       private:
@@ -58,20 +58,18 @@
           - app1
           - app2
 
-# role: gems
+    # role: redmine
     av_user:
       - user1
       - user2
 
-# role: geerlingguy.ruby
+    # role: geerlingguy.ruby
     ruby_install_bundler: true
-    
-  roles:
-    - { role: info, tags: 'info' }
-    - { role: common, tags: 'common' }
-    - { role: addusers, tags: 'addusers' }
-    - { role: zzet.rbenv, tags: 'rbenv' }
-    - { role: geerlingguy.ruby, tags: 'bundler' }
-    - { role: gems, tags: 'gems' }
-    - { role: redmine, tags: 'redmine' }
 
+  roles:
+    - {role: info, tags: 'info'}
+    - {role: common, tags: 'common'}
+    - {role: addusers, tags: 'addusers'}
+    - {role: zzet.rbenv, tags: 'rbenv'}
+    - {role: geerlingguy.ruby, tags: 'bundler'}
+    - {role: redmine, tags: 'redmine'}

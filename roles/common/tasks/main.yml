@@ -10,15 +10,15 @@
     name: "{{ packages }}"
   vars:
     packages:
-    - curl
-    - wget
-    - tmux
-    - atop
-    - ncdu
-    - iotop
-    - net-tools
-    - git
-    - xz-utils
+      - curl
+      - wget
+      - tmux
+      - atop
+      - ncdu
+      - iotop
+      - net-tools
+      - git
+      - xz-utils
 - name: "Set timezone to your timezone"
   timezone:
     name: "{{ timezone }}"
@@ -29,4 +29,5 @@
     state: present
 
 - name: "Set as default locale"
-  command: "update-locale LANG={{ my_locale }} LC_ALL={{ my_locale }} && dpkg-reconfigure console-setup"
+  command: "update-locale LANG={{ my_locale }} \
+  LC_ALL={{ my_locale }} && dpkg-reconfigure console-setup"

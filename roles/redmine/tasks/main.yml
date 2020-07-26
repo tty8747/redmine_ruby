@@ -1,10 +1,19 @@
 ---
 
-- name: "Clone redmine's repo"
-  git:
-    repo: "https://github.com/redmine/redmine"
-    dest: "{{ path_to_mount_raid }}/{{ item }}"
-  loop:
-    - "app1"
-    - "app2"
+- name: "Template .gemrc to {{ item }} directory"
+  template:
+    src: "templates/.gemrc.j2"
+    dest: "{{ path_to_mount_raid }}/users_private/{{ item }}/.gemrc"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: '0600'
+  loop: "{{ av_user }}"
 
+- name: "Install dependencies"
+  apt:
+    pkg:
+      - imagemagick
+      - ghostscript
+  tags: test
+
+# - name: "Install gems"
