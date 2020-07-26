@@ -14,6 +14,16 @@
     pkg:
       - imagemagick
       - ghostscript
+
+- name: "DEBUG!"
+  debug:
+    msg: "{{ path_to_mount_raid }}/{{ item.1.name }}/Gemfile"
+  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
   tags: test
 
-# - name: "Install gems"
+- name: "Install gems"
+  bundler:
+    state: present
+    gemfile: "{{ path_to_mount_raid }}/{{ item.1.name }}/Gemfile"
+    extra_args: --without development test
+  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
