@@ -1,0 +1,5 @@
+[cloud_instance]
+redmine ansible_host=213.219.214.1
+
+[cloud_instance:vars]
+ansible_python_interpreter=/usr/bin/python3

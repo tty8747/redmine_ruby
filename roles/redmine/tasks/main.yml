@@ -1,0 +1,10 @@
+---
+
+- name: "Clone redmine's repo"
+  git:
+    repo: "https://github.com/redmine/redmine"
+    dest: "{{ path_to_mount_raid }}/{{ item }}"
+  loop:
+    - "app1"
+    - "app2"
+

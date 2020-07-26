@@ -1,0 +1,10 @@
+---
+
+- name: "Template .gemrc to {{ item }} directory"
+  template:
+    src: "templates/.gemrc.j2"
+    dest: "{{ path_to_mount_raid }}/users_private/{{ item }}/.gemrc"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: '0600'
+  loop: "{{ av_user }}"

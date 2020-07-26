@@ -1,0 +1,39 @@
+---
+
+path_to_mount_raid: /raid
+
+group_dict:
+  private:
+    settings:
+      - name: app1
+        params:
+          mode: "u=rwx,g=rwx,o---"
+          owner: nobody
+          folder_state: directory
+          grp_state: present
+          acl_state: present
+  public:
+    settings:
+      - name: app2
+        params:
+          mode: "u=rwx,g=rwx,o---"
+          owner: nobody
+          folder_state: directory
+          grp_state: present
+          acl_state: present
+
+users:
+  user1:
+    description: "User firstname and surname"
+    password: "tuphee9H"
+    state: present
+    grps:
+      - app1
+  user2:
+    description: "User firstname and surname"
+    password: "heewai0A"
+    state: present
+    grps:
+      - app1
+      - app2
+
