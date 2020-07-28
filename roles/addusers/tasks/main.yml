@@ -6,6 +6,14 @@
     state: "{{ item.1.params.grp_state }}"
   loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
 
+- name: "Create main folder"
+  file:
+    path: "{{ path_to_mount_raid }}"
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+
 - name: "Create folders"
   file:
     path: "{{ path_to_mount_raid }}/{{ item.1.name }}"
@@ -23,7 +31,7 @@
     groups: "{{ item.value.grps | list }}"
     home: "{{ path_to_mount_raid }}/users_private/{{ item.key }}"
     state: "{{ item.value.state }}"
-    expires: 1422403387
+    expires: -1
   loop: "{{ lookup('dict', users) }}"
 
 - name: "Sets default ACL"

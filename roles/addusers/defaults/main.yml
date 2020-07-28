@@ -7,7 +7,7 @@ group_dict:
     settings:
       - name: app1
         params:
-          mode: "u=rwx,g=rwx,o---"
+          mode: "u=rwx,g=rwx,o=---"
           owner: nobody
           folder_state: directory
           grp_state: present
@@ -16,7 +16,7 @@ group_dict:
     settings:
       - name: app2
         params:
-          mode: "u=rwx,g=rwx,o---"
+          mode: "u=rwx,g=rwx,o=---"
           owner: nobody
           folder_state: directory
           grp_state: present
