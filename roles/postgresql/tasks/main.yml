@@ -1,0 +1,11 @@
+---
+
+- name: "Update cache"
+  apt:
+    update_cache: "{{ update_cache }}"
+    cache_valid_time: "{{ cache_valid_time }}"
+
+- name: "Install Postgresql 10"
+  apt:
+    name: postgresql-10
+    state: present
