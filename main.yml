@@ -10,18 +10,6 @@
   vars:
     servername: "{{ inventory_hostname }}"
 
-    # role: zzet.rbenv
-    rbenv:
-      env: system
-      version: v1.1.2
-      default_ruby: 2.6.6
-      rubies:
-        - version: 2.6.6
-    rbenv_clean_up: "false"
-    rbenv_users:
-      - user1
-      - user2
-
     # role: addusers
     path_to_mount_raid: /raid
     group_dict:
@@ -64,12 +52,18 @@
       - user2
 
     # role: geerlingguy.ruby
+    workspace: /root
+    ruby_version: 2.5.1
     ruby_install_bundler: true
+#    ruby_install_gems:
+#      - pg
+#      - ast
+    ruby_install_gems_user: deploy
 
   roles:
     - {role: info, tags: 'info'}
     - {role: common, tags: 'common'}
     - {role: addusers, tags: 'addusers'}
-    - {role: zzet.rbenv, tags: 'rbenv'}
-    - {role: geerlingguy.ruby, tags: 'bundler'}
+    - {role: geerlingguy.ruby, tags: 'ruby'}
     - {role: redmine, tags: 'redmine'}
+    - {role: postgresql, tags: 'postgresql'}
