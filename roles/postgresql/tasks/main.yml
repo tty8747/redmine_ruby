@@ -9,3 +9,20 @@
   apt:
     name: postgresql-10
     state: present
+
+- name: "Create user, set MD5-hashed password, grant privs"
+  become_user: postgres
+  become: "yes"
+  postgresql_user:
+    name: redmine
+    password: minered
+    expires: 'infinity'
+    role_attr_flags: CREATEDB,NOSUPERUSER
+
+- name: "Create a new database with name redmine"
+  become_user: postgres
+  become: "yes"
+  postgresql_db:
+    name: redmine
+    owner: redmine
+    encoding: UTF-8
