@@ -18,6 +18,7 @@
     password: minered
     expires: 'infinity'
     role_attr_flags: CREATEDB,NOSUPERUSER
+  no_log: true
 
 - name: "Create a new database with name redmine"
   become_user: postgres
