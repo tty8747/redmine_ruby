@@ -38,6 +38,7 @@
           - python3-crypto
           - python3-pexpect
           - python3-apt
+          - python3-psycopg2
 
     - name: "Upgrade all packages"
       apt:
