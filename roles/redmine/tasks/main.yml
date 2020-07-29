@@ -34,114 +34,44 @@
 - name: "Template postgresql config"
   template:
     src: "roles/redmine/templates/database.yml.j2"
-    dest: "/raid/app1/config/database.yml"
-    owner: user1
-    group: app1
+    dest: "{{ path_to_mount_raid }}/{{ item.1.name }}/config/database.yml"
+    group: "{{ item.1.name }}"
     mode: '0770'
+  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
 
 - name: "Install gems from Gemfile"
   bundler:
     state: present
-#    user_install: "no"
-    deployment_mode: "yes"
-#    exclude_groups:
-#      - development
-#      - test
-#    gemfile: "{{ path_to_mount_raid }}/{{ item.1.name }}/Gemfile"
-    chdir: "/raid/app1/"
+    user_install: "no"
+    chdir: "{{ path_to_mount_raid }}/{{ item.1.name }}"
   loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
-  tags: go1
 
-- name: "Install gems from list"
-  become_user: user1
-  become: "yes"
-  gem:
-    name: "{{ item.name }}"
-    version: "{{ item.ver }}"
-    user_install: "yes"
-    state: present
-  loop:
-    - { name: 'pg', ver: '1.2.3' }
-    - { name: 'rake', ver: '13.0.1' }
-    - { name: 'i18n', ver: '1.8.5' }
-    - { name: 'minitest', ver: '5.14.1' }
-    - { name: 'thread_safe', ver: '0.3.6' }
-    - { name: 'tzinfo', ver: '1.2.7' }
-    - { name: 'activesupport', ver: '5.2.4.2' }
-    - { name: 'builder', ver: '3.2.4' }
-    - { name: 'erubi', ver: '1.9.0' }
-    - { name: 'mini_portile2', ver: '2.4.0' }
-    - { name: 'nokogiri', ver: '1.10.10' }
-    - { name: 'crass', ver: '1.0.6' }
-    - { name: 'loofah', ver: '2.6.0' }
-    - { name: 'actionview', ver: '5.2.4.2' }
-    - { name: 'rack', ver: '2.2.3' }
-    - { name: 'actionpack', ver: '5.2.4.2' }
-    - { name: 'nio4r', ver: '2.5.2' }
-    - { name: 'actioncable', ver: '5.2.4.2' }
-    - { name: 'globalid', ver: '0.4.2' }
-    - { name: 'activejob', ver: '5.2.4.2' }
-    - { name: 'mini_mime', ver: '1.0.2' }
-    - { name: 'mail', ver: '2.7.1' }
-    - { name: 'actionmailer', ver: '5.2.4.2' }
-    - { name: 'method_source', ver: '1.0.0' }
-    - { name: 'thor', ver: '1.0.1' }
-    - { name: 'railties', ver: '5.2.4.2' }
-    - { name: 'activemodel', ver: '5.2.4.2' }
-    - { name: 'arel', ver: '9.0.0' }
-    - { name: 'activerecord', ver: '5.2.4.2' }
-    - { name: 'mimemagic', ver: '0.3.5' }
-    - { name: 'marcel', ver: '0.3.3' }
-    - { name: 'activestorage', ver: '5.2.4.2' }
-    - { name: 'public_suffix', ver: '4.0.5' }
-    - { name: 'addressable', ver: '2.7.0' }
-    - { name: 'ast', ver: '2.4.1' }
-    - { name: 'regexp_parser', ver: '1.7.1' }
-    - { name: 'xpath', ver: '3.2.0' }
-    - { name: 'capybara', ver: '3.31.0' }
-    - { name: 'childprocess', ver: '3.0.0' }
-    - { name: 'css_parser', ver: '1.7.1' }
-    - { name: 'stringio', ver: '0.1.3' }
-    - { name: 'csv', ver: '3.1.6' }
-    - { name: 'docile', ver: '1.3.2' }
-    - { name: 'htmlentities', ver: '4.3.4' }
-    - { name: 'jaro_winkler', ver: '1.5.4' }
-    - { name: 'mini_magick', ver: '4.10.1' }
-    - { name: 'mocha', ver: '1.11.2' }
-    - { name: 'parallel', ver: '1.19.2' }
-    - { name: 'parser', ver: '2.7.1.4' }
-    - { name: 'pg', ver: '1.2.3' }
-    - { name: 'puma', ver: '4.3.5' }
-    - { name: 'sprockets', ver: '4.0.2' }
-    - { name: 'rails', ver: '5.2.4.2' }
-    - { name: 'rainbow', ver: '3.0.0' }
-    - { name: 'rbpdf', ver: '1.20.1' }
-    - { name: 'redcarpet', ver: '3.5.0' }
-    - { name: 'request_store', ver: '1.5.0' }
-    - { name: 'rexml', ver: '3.2.4' }
-    - { name: 'roadie', ver: '4.0.0' }
-    - { name: 'rouge', ver: '3.21.0' }
-    - { name: 'rubocop', ver: '0.81.0' }
-    - { name: 'rubyzip', ver: '2.3.0' }
-    - { name: 'simplecov', ver: '0.18.5' }
-    - { name: 'yard', ver: '0.9.25' }
-    - { name: 'concurrent-ruby', ver: '1.1.6' }
-    - { name: 'rails-dom-testing', ver: '2.0.3' }
-    - { name: 'rails-html-sanitizer', ver: '1.3.0' }
-    - { name: 'rack-test', ver: '1.1.0' }
-    - { name: 'websocket-extensions', ver: '0.1.5' }
-    - { name: 'websocket-driver', ver: '0.7.3' }
-    - { name: 'actionpack-xml_parser', ver: '2.0.1' }
-    - { name: 'net-ldap', ver: '0.16.2' }
-    - { name: 'ruby-openid', ver: '2.9.2' }
-    - { name: 'rack-openid', ver: '1.4.2' }
-    - { name: 'sprockets-rails', ver: '3.2.1' }
-    - { name: 'rbpdf-font', ver: '1.19.1' }
-    - { name: 'roadie-rails', ver: '2.1.1' }
-    - { name: 'ruby-progressbar', ver: '1.10.1' }
-    - { name: 'unicode-display_width', ver: '1.7.0' }
-    - { name: 'rubocop-performance', ver: '1.5.2' }
-    - { name: 'rubocop-rails', ver: '2.5.2' }
-    - { name: 'selenium-webdriver', ver: '3.142.7' }
-    - { name: 'simplecov-html', ver: '0.12.2' }
-  tags: go
+- name: "Generate the secret token"
+  command: "bundle exec rake generate_secret_token"
+  args:
+    chdir: "{{ path_to_mount_raid }}/{{ item.1.name }}"
+  run_once: "true"
+  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
+
+- name: "Run the database migrations"
+  command: "bundle exec rake db:migrate"
+  args:
+    chdir: "{{ path_to_mount_raid }}/{{ item.1.name }}"
+  environment:
+    RAILS_ENV: production
+  run_once: "true"
+  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
+
+#- name: "Run load default data"
+#  expect:
+#    echo: "yes"
+#    command: "bundle exec rake redmine:load_default_data"
+#    args:
+#      chdir: "{{ path_to_mount_raid }}/{{ item.1.name }}"
+#    environment:
+#      RAILS_ENV: production
+#    responses:
+#     press_enter: /bin/bash -c "echo"
+#  run_once: "true"
+#  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
+#  tags: go
