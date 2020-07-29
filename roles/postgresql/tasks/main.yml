@@ -10,7 +10,7 @@
     name: postgresql-10
     state: present
 
-- name: "Create user, set MD5-hashed password, grant privs"
+- name: "Create user, set password, grant privs"
   become_user: postgres
   become: "yes"
   postgresql_user:
