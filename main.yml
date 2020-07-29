@@ -55,15 +55,12 @@
     workspace: /root
     ruby_version: 2.5.1
     ruby_install_bundler: true
-#    ruby_install_gems:
-#      - pg
-#      - ast
     ruby_install_gems_user: deploy
 
   roles:
     - {role: info, tags: 'info'}
     - {role: common, tags: 'common'}
     - {role: addusers, tags: 'addusers'}
+    - {role: postgresql, tags: 'postgresql'}
     - {role: geerlingguy.ruby, tags: 'ruby'}
     - {role: redmine, tags: 'redmine'}
-    - {role: postgresql, tags: 'postgresql'}
