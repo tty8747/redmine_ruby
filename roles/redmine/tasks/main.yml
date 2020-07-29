@@ -62,16 +62,17 @@
   run_once: "true"
   loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
 
-#- name: "Run load default data"
-#  expect:
-#    echo: "yes"
-#    command: "bundle exec rake redmine:load_default_data"
-#    args:
-#      chdir: "{{ path_to_mount_raid }}/{{ item.1.name }}"
-#    environment:
-#      RAILS_ENV: production
-#    responses:
-#     press_enter: /bin/bash -c "echo"
-#  run_once: "true"
-#  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
-#  tags: go
+- name: "Run load default data"
+  become_user: "{{ item.0.key }}"
+  expect:
+    command: "bundle exec rake redmine:load_default_data"
+    timeout: 5
+    responses:
+      Select language(.*): 'en'
+  args:
+    chdir: "{{ path_to_mount_raid }}/{{ item.1 }}"
+  environment:
+    RAILS_ENV: production
+  run_once: "true"
+  loop: "{{ users | dict2items | subelements('value.grps') }}"
+  no_log: true
