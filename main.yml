@@ -24,6 +24,7 @@
               acl_state: present
               port: 9393
               db: db_app1
+              db_pass: "Tushoo7e"
               path: /raid/
               group: app1
       public:
@@ -36,7 +37,8 @@
               grp_state: present
               acl_state: present
               port: 9393
-              db: db_app1
+              db: db_app2
+              db_pass: "Tee0AeKa"
               path: /raid/
               group: app1
     users:
