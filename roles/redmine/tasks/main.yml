@@ -34,10 +34,10 @@
 - name: "Template postgresql config"
   template:
     src: "roles/redmine/templates/database.yml.j2"
-    dest: "{{ path_to_mount_raid }}/{{ item.1.name }}/config/database.yml"
-    group: "{{ item.1.name }}"
+    dest: "{{ path_to_mount_raid }}/{{ item.value.settings.0.name }}/config/database.yml"
+    group: "{{ item.value.settings.0.params.group }}"
     mode: '0770'
-  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
+  loop: "{{ lookup('dict', group_dict) }}"
 
 - name: "Install gems from Gemfile"
   bundler:

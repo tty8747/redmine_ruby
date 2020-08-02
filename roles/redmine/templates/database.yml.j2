@@ -35,10 +35,10 @@
 # PostgreSQL configuration example
 production:
   adapter: postgresql
-  database: redmine
+  database: "{{ item.value.settings.0.params.db }}"
   host: localhost
-  username: redmine
-  password: "minered"
+  username: "{{ item.value.settings.0.params.db }}"
+  password: "{{ item.value.settings.0.params.db_pass }}"
 
 # SQLite3 configuration example
 #production:
