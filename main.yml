@@ -74,3 +74,4 @@
     - {role: postgresql, tags: 'postgresql'}
     - {role: geerlingguy.ruby, tags: 'ruby'}
     - {role: redmine, tags: 'redmine'}
+    - {role: puma_service, tags: 'puma'}
