@@ -18,28 +18,28 @@
           - name: app1
             params:
               mode: "u=rwx,g=rwx,o=---"
-              owner: nobody
+              owner: user1
               folder_state: directory
               grp_state: present
               acl_state: present
               port: 9393
               db: db_app1
               db_pass: "Tushoo7e"
-              path: /raid/
+              path: /raid
               group: app1
       public:
         settings:
           - name: app2
             params:
               mode: "u=rwx,g=rwx,o=---"
-              owner: nobody
+              owner: user2
               folder_state: directory
               grp_state: present
               acl_state: present
               port: 9393
               db: db_app2
               db_pass: "Tee0AeKa"
-              path: /raid/
+              path: /raid
               group: app1
     users:
       user1:

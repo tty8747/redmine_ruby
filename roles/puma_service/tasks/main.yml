@@ -3,7 +3,8 @@
 - name: "Push template puma.rb"
   template:
     src: "templates/puma.rb.j2"
-    dest: "{{ item.value.settings.0.params.path }}/{{ item.value.settings.0.name }}/config/puma.rb"
+    dest: "{{ item.value.settings.0.params.path }}/
+    {{ item.value.settings.0.name }}/config/puma.rb"
     owner: "{{ item.value.settings.0.params.owner }}"
     group: "{{ item.value.settings.0.params.group }}"
     mode: '0640'
@@ -13,19 +14,22 @@
   become_user: "{{ item.key }}"
   become: "yes"
   file:
-    path: "lookup('ENV','home')/.config/systemd/user"
+    path: "{{ path_to_mount_raid }}/users_private/
+    {{ item.key }}/.config/systemd/user"
     state: directory
     mode: '0700'
   loop: "{{ lookup('dict', users) }}"
 
-#- debug:
-#  become_user: "{{ item.key }}"
-#  become: "yes"
-#    # msg: "path: {{ lookup('ENV','home') }}/{{ item.key }}"
-#    # is {{ item.0 }} ({{ item.value.description }})
-#    msg: "{{ lookup('env','HOME') }} is an environment variable"
-#  loop: "{{ lookup('dict', users) }}"
+- name: "Push systemd service template"
+  template:
+    src: "templates/puma.service.j2"
+    dest: "{{ item.value.settings.0.params.path }}/users_private/{{ item.value.settings.0.params.owner }}/.config/systemd/user/puma.service"
+    owner: "{{ item.value.settings.0.params.owner }}"
+    group: "{{ item.value.settings.0.params.group }}"
+    mode: '0640'
+  loop: "{{ lookup('dict', group_dict) }}"
+  tags: go
 
 - debug:
-    msg: "{{ ansible_env.HOME }}"
-  tags: go 
+    msg: "{{ item.value.settings.0.params.owner }}"
+  loop: "{{ lookup('dict', group_dict) }}"

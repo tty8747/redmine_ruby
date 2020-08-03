@@ -1,0 +1,19 @@
+i[Unit]
+Description=Puma service
+After=network.target
+
+[Service]
+Type=forking
+Environment=RAILS_ENV=production
+WorkingDirectory={{ item.value.settings.0.params.path }}/{{ item.value.settings.0.name }}
+
+PIDFile={{ item.value.settings.0.params.path }}/{{ item.value.settings.0.name }}/shared/pids/puma.pid
+ExecStart=/bin/bash -l -c 'bundle exec puma -C config/puma.rb -d'
+ExecStop=/bin/bash -l -c 'bundle exec pumactl -F config/puma.rb stop'
+ExecReload=/bin/bash -l -c 'bundle exec pumactl -F config/puma.rb phased-restart'
+Restart=on-failure
+
+SyslogIdentifier={{ item.value.settings.0.name }}-puma
+
+[Install]
+WantedBy=default.target
