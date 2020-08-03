@@ -3,7 +3,7 @@
 - name: "Push template puma.rb"
   template:
     src: "templates/puma.rb.j2"
-    dest: "{{ item.value.settings.0.params.path }}/
+    dest: "{{ item.value.settings.0.params.path }}/\
     {{ item.value.settings.0.name }}/config/puma.rb"
     owner: "{{ item.value.settings.0.params.owner }}"
     group: "{{ item.value.settings.0.params.group }}"
@@ -14,7 +14,7 @@
   become_user: "{{ item.key }}"
   become: "yes"
   file:
-    path: "{{ path_to_mount_raid }}/users_private/
+    path: "{{ path_to_mount_raid }}/users_private/\
     {{ item.key }}/.config/systemd/user"
     state: directory
     mode: '0700'
