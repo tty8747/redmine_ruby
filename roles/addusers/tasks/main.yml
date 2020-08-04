@@ -14,15 +14,6 @@
     mode: '0755'
     state: directory
 
-- name: "Create folders"
-  file:
-    path: "{{ path_to_mount_raid }}/{{ item.1.name }}"
-    owner: "{{ item.1.params.owner }}"
-    group: "{{ item.1.name }}"
-    mode: "{{ item.1.params.mode }}"
-    state: "{{ item.1.params.folder_state }}"
-  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
-
 - name: "Create users"
   user:
     name: "{{ item.key }}"
@@ -33,6 +24,15 @@
     state: "{{ item.value.state }}"
     expires: -1
   loop: "{{ lookup('dict', users) }}"
+
+- name: "Create folders"
+  file:
+    path: "{{ path_to_mount_raid }}/{{ item.1.name }}"
+    owner: "{{ item.1.params.owner }}"
+    group: "{{ item.1.name }}"
+    mode: "{{ item.1.params.mode }}"
+    state: "{{ item.1.params.folder_state }}"
+  loop: "{{ group_dict | dict2items | subelements('value.settings') }}"
 
 - name: "Sets default ACL"
   acl:
