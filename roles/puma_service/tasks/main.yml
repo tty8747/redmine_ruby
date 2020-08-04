@@ -10,12 +10,12 @@
     mode: '0640'
   loop: "{{ lookup('dict', group_dict) }}"
 
-- name: "Create a directory for service file"
+- name: "Create the directory for service file"
   become_user: "{{ item[1].key }}"
   become: "yes"
   file:
-    path: "{{ path_to_mount_raid }}/users_private/\
-    {{ item.key }}/.config/systemd/user"
+    path: "{{ item[0].value.settings.0.params.path }}/users_private/\
+    {{ item[1].key }}/.config/systemd/user"
     state: directory
     mode: '0700'
   with_nested:
