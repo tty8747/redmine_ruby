@@ -28,8 +28,3 @@
     group: "{{ item.value.settings.0.params.group }}"
     mode: '0640'
   loop: "{{ lookup('dict', group_dict) }}"
-  tags: go
-
-- debug:
-    msg: "{{ item.value.settings.0.params.owner }}"
-  loop: "{{ lookup('dict', group_dict) }}"
