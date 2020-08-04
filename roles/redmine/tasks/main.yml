@@ -17,7 +17,6 @@
     repo: "https://github.com/redmine/redmine"
     dest: "{{ item.value.settings.0.params.path }}/{{ item.value.settings.0.name }}"
   loop: "{{ lookup('dict', group_dict) }}"
-  tags: go
 
 - name: "Give user permissions"
   file:
@@ -96,7 +95,6 @@
     group: "{{ item.value.settings.0.params.group }}"
     mode: '0770'
   loop: "{{ lookup('dict', group_dict) }}"
-  tags: go
 
 - name: "Create a directories for temp files"
   become_user: "{{ item[0].value.settings.0.params.owner }}"
@@ -111,4 +109,3 @@
   with_nested:
     - "{{ lookup('dict', group_dict) }}"
     - ['log', 'pids', 'sockets']
-  tags: go
