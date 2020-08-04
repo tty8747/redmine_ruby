@@ -31,3 +31,29 @@
     group: "{{ item.value.settings.0.params.group }}"
     mode: '0700'
   loop: "{{ lookup('dict', group_dict) }}"
+
+- name: "Touch .profile"
+  file:
+    path: "{{ item.value.settings.0.params.path }}/users_private/\
+      {{ item.value.settings.0.params.owner }}/.profile"
+    owner: "{{ item.value.settings.0.params.owner }}"
+    state: touch
+    mode: '0700'
+  loop: "{{ lookup('dict', group_dict) }}"
+  tags: go
+
+- name: "Create the directory for linger"
+  file:
+    path: "/var/lib/systemd/linger"
+    state: directory
+    mode: '755'
+  tags: go
+
+- name: "Touch user linger file"
+  file:
+    path: "/var/lib/systemd/linger/{{ item.value.settings.0.params.owner }}"
+    owner: "{{ item.value.settings.0.params.owner }}"
+    state: touch
+    mode: '644'
+  loop: "{{ lookup('dict', group_dict) }}"
+  tags: go
