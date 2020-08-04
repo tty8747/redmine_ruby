@@ -11,7 +11,9 @@
     servername: "{{ inventory_hostname }}"
 
     # role: addusers
-    path_to_mount_raid: /raid
+    _path_to_mount_raid: &path_to_mount_raid /raid
+
+    path_to_mount_raid: *path_to_mount_raid
     group_dict:
       private:
         settings:
@@ -22,11 +24,12 @@
               folder_state: directory
               grp_state: present
               acl_state: present
-              port: 9393
               db: db_app1
               db_pass: "Tushoo7e"
-              path: /raid
+              path: *path_to_mount_raid
               group: app1
+              shared_folder: shared
+
       public:
         settings:
           - name: app2
@@ -36,11 +39,11 @@
               folder_state: directory
               grp_state: present
               acl_state: present
-              port: 9393
               db: db_app2
               db_pass: "Tee0AeKa"
-              path: /raid
-              group: app1
+              path: *path_to_mount_raid
+              group: app2
+              shared_folder: shared
     users:
       user1:
         description: "User firstname and surname"
@@ -55,11 +58,6 @@
         grps:
           - app1
           - app2
-
-    # role: redmine
-    av_user:
-      - user1
-      - user2
 
     # role: geerlingguy.ruby
     workspace: /root
