@@ -40,14 +40,25 @@
     state: touch
     mode: '0700'
   loop: "{{ lookup('dict', group_dict) }}"
-  tags: go
+
+- name: "Use wrapper of getent for check user uid"
+  getent:
+    database: passwd
+
+- name: "Insert env to .profile"
+  lineinfile:
+    dest: "{{ item.value.settings.0.params.path }}/users_private/\
+    {{ item.value.settings.0.params.owner }}/.profile"
+    insertafter: "^fi$"
+    line: "export XDG_RUNTIME_DIR=/run/user/\
+    {{ getent_passwd[item.value.settings.0.params.owner].1 }}"
+  loop: "{{ lookup('dict', group_dict) }}"
 
 - name: "Create the directory for linger"
   file:
     path: "/var/lib/systemd/linger"
     state: directory
     mode: '755'
-  tags: go
 
 - name: "Touch user linger file"
   file:
@@ -56,4 +67,21 @@
     state: touch
     mode: '644'
   loop: "{{ lookup('dict', group_dict) }}"
-  tags: go
+
+- name: "Start enable-linger for users"
+  command: "loginctl enable-linger {{ item.value.settings.0.params.owner }}"
+  loop: "{{ lookup('dict', group_dict) }}"
+
+- name: "Start puma services"
+  become: "yes"
+  become_user: "{{ item.value.settings.0.params.owner }}"
+  systemd:
+    daemon_reload: "yes"
+    enabled: "yes"
+    scope: user
+    state: started
+    name: puma.service
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/\
+    {{ getent_passwd[item.value.settings.0.params.owner].1 }}"
+  loop: "{{ lookup('dict', group_dict) }}"
