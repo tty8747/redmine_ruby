@@ -1,0 +1,24 @@
+upstream {{ item.value.settings.0.name }} {
+    # Path to Puma SOCK file, as defined previously
+    server unix:{{ item.value.settings.0.params.path }}/{{ item.value.settings.0.name }}/{{ item.value.settings.0.params.shared_folder }}/sockets/puma.sock fail_timeout=0;
+}
+
+server {
+    listen {{ item.value.settings.0.params.nginx_port }};
+    server_name {{ item.value.settings.0.name }};
+
+    root {{ item.value.settings.0.params.path }}/{{ item.value.settings.0.name }}/public;
+
+    try_files $uri/index.html $uri @{{ item.value.settings.0.name }};
+
+    location @{{ item.value.settings.0.name }} {
+        proxy_pass http://{{ item.value.settings.0.name }};
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+    }
+
+    error_page 500 502 503 504 /500.html;
+    client_max_body_size 4G;
+    keepalive_timeout 10;
+}

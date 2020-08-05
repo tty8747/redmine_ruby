@@ -29,6 +29,7 @@
               path: *path_to_mount_raid
               group: app1
               shared_folder: shared
+              nginx_port: 80
 
       public:
         settings:
@@ -44,6 +45,7 @@
               path: *path_to_mount_raid
               group: app2
               shared_folder: shared
+              nginx_port: 8081
     users:
       user1:
         description: "User firstname and surname"
@@ -73,3 +75,4 @@
     - {role: geerlingguy.ruby, tags: 'ruby'}
     - {role: redmine, tags: 'redmine'}
     - {role: puma_service, tags: 'puma'}
+    - {role: nginx, tags: 'nginx'}

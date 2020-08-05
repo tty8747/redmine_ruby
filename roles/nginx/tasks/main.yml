@@ -1,0 +1,48 @@
+---
+
+- name: "Update cache"
+  apt:
+    update_cache: "{{ update_cache }}"
+    cache_valid_time: "{{ cache_valid_time }}"
+
+- name: "Install software"
+  apt:
+    name: nginx
+  notify: start nginx
+
+- name: "Remove default nginx config"
+  file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+  notify: reload nginx
+
+- name: "Push nginx templates"
+  template:
+    src: "templates/redmine.name.conf.j2"
+    dest: "/etc/nginx/sites-available/\
+    {{ item.value.settings.0.name }}.domain.conf"
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  loop: "{{ lookup('dict', group_dict) }}"
+  notify: reload nginx
+
+- name: "Create symbolic link to sites-enabled"
+  file:
+    src: "/etc/nginx/sites-available/\
+    {{ item.value.settings.0.name }}.domain.conf"
+    dest: "/etc/nginx/sites-enabled/\
+    {{ item.value.settings.0.name }}.domain.conf"
+    owner: root
+    group: root
+    state: link
+  loop: "{{ lookup('dict', group_dict) }}"
+  notify: reload nginx
+
+- name: "Add www-data to project groups"
+  user:
+    name: www-data
+    group: "{{ item.value.settings.0.params.group }}"
+    append: "yes"
+  loop: "{{ lookup('dict', group_dict) }}"
+  notify: reload nginx
