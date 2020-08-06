@@ -1,4 +1,4 @@
-# Redmine (ansible)
+# Redmine (ruby on rails with ansible)
 
 ## How to start:
 
