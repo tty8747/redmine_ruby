@@ -19,7 +19,7 @@
         settings:
           - name: app1
             params:
-              mode: "u=rwx,g=rwx,o=---"
+              mode: '2770'
               owner: user1
               folder_state: directory
               grp_state: present
@@ -35,7 +35,7 @@
         settings:
           - name: app2
             params:
-              mode: "u=rwx,g=rwx,o=---"
+              mode: '2770'
               owner: user2
               folder_state: directory
               grp_state: present
