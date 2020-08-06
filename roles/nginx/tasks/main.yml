@@ -42,7 +42,8 @@
 - name: "Add www-data to project groups"
   user:
     name: www-data
-    group: "{{ item.value.settings.0.params.group }}"
+    groups: "{{ item.value.settings.0.params.group }}"
     append: "yes"
   loop: "{{ lookup('dict', group_dict) }}"
   notify: reload nginx
+  tags: go
